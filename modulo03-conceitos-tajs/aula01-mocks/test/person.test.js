@@ -1,4 +1,4 @@
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it, jest } from "@jest/globals";
 import Person from "../src/person";
 
 describe("#Person Suite", () => {
@@ -145,6 +145,35 @@ describe("#Person Suite", () => {
           )}`
         )
       );
+    });
+  });
+
+  describe("#process", () => {
+    it("validar o processo de validar um person", () => {
+      // nao retestar o que já foi testado
+      // Este metodo abaixo faz mais sentido para quando se tem interações externas como
+      // chamadas de API, banco de dados e etc..
+      // Mocks são simulações de funções que voce pode fazer ao testar o comportamento!!
+
+      // Arrange
+      const mockPerson = {
+        cpf: "111.222.333-00",
+        name: "Ze da Silva",
+      };
+      //.name é do jest para pegar o nome do método validade
+      jest.spyOn(Person, Person.validate.name).mockReturnValue();
+      //.name é do jest para pegar o nome do método format
+      jest.spyOn(Person, Person.format.name).mockReturnValue({
+        cpf: "11122233300",
+        name: "Ze",
+        lastName: "da Silva",
+      });
+      // Act
+      const result = Person.process(mockPerson);
+
+      // Assert
+      const expected = "ok";
+      expect(result).toStrictEqual(expected);
     });
   });
 });
